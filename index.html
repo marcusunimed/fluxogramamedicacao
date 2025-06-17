@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Processo BPMN Completo - Medicação Externa CEU</title>
+<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #00995D 0%, #00401A 100%);
+            color: white;
+            border-radius: 10px;
+            gap: 20px;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .unimed-logo {
+            height: 60px;
+            width: auto;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .process-section {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #B1D34B;
+            background: #f8f9fa;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00995D;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .step-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .step-row.vertical {
+            flex-direction: column;
+        }
+        
+        .start-event, .end-event {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .start-event {
+            border: 3px solid #00995D;
+            background: #e8f5e8;
+            color: #00401A;
+        }
+
+        .end-event {
+            border: 3px solid #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .task {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0 10px;
+            width: 280px;
+            text-align: left;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .task-header i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .task-content {
+            font-size: 12px;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        /* Categorias de Tasks */
+        .task.phone { 
+            border-color: #4caf50; 
+        }
+        .task.phone .task-header { 
+            color: #4caf50; 
+        }
+        
+        .task.system { 
+            border-color: #ff9800; 
+        }
+        .task.system .task-header { 
+            color: #ff9800; 
+        }
+
+        .task.decision { 
+            border-color: #2196f3; 
+        }
+        .task.decision .task-header { 
+            color: #2196f3; 
+        }
+
+        .task.medical { 
+            border-color: #9c27b0; 
+        }
+        .task.medical .task-header { 
+            color: #9c27b0; 
+        }
+
+        .task.final { 
+            border-color: #607d8b; 
+        }
+        .task.final .task-header { 
+            color: #607d8b; 
+        }
+        
+        .task.critical { 
+            border-color: #f44336; 
+        }
+        .task.critical .task-header { 
+            color: #f44336; 
+        }
+
+        .task.subprocess { 
+            border-color: #9c27b0; 
+        }
+        .task.subprocess .task-header { 
+            color: #9c27b0; 
+        }
+        
+        .gateway {
+            width: 60px;
+            height: 60px;
+            background: #fff9c4;
+            border: 3px solid #f9a825;
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(249,168,37,0.3);
+        }
+        
+        .gateway-text {
+            transform: rotate(-45deg);
+            font-size: 20px;
+            font-weight: bold;
+            color: #e65100;
+        }
+        
+        .arrow {
+            font-size: 20px;
+            color: #666;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+        
+        .decision-branches {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            min-width: 220px;
+        }
+        
+        .branch-label {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .branch-label i {
+            width: 14px;
+            height: 14px;
+        }
+        
+        .yes-branch { 
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #2e7d32; 
+        }
+        .no-branch { 
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828; 
+        }
+        
+        .condition {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 10;
+            color: #1976d2;
+            box-shadow: 0 2px 4px rgba(33,150,243,0.2);
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(33,150,243,0.2);
+        }
+
+        .contact-info h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .contact-info p {
+            color: #333;
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c8 100%);
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 2px 6px rgba(76,175,80,0.2);
+        }
+
+        .info-box h3 {
+            color: #2e7d32;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 2px 6px rgba(255,152,0,0.2);
+        }
+
+        .warning-box h3 {
+            color: #e65100;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .systems-box {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 2px 6px rgba(156,39,176,0.2);
+        }
+
+        .systems-box h3 {
+            color: #7b1fa2;
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box ul, .warning-box ul, .systems-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .info-box li, .warning-box li, .systems-box li {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        
+        .legend-symbol {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            border: 2px solid;
+        }
+
+        .legend h3 {
+            grid-column: 1/-1;
+            margin: 0 0 15px 0;
+            color: #00995D;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .signatures-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .signature-box h3 {
+            color: #00995D;
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .signature-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .signature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .signature-label {
+            color: #00995D;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #B1D34B;
+            padding-bottom: 5px;
+        }
+        
+        .signature-content {
+            text-align: left;
+        }
+        
+        .signature-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .signature-role {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        
+        .signature-date {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .signature-line {
+            width: 250px;
+            height: 20px;
+            border-bottom: 1px solid #333;
+            margin: 15px auto 5px auto;
+        }
+        
+        .signature-text {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .unimed-logo {
+                height: 50px;
+            }
+            
+            .step-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .decision-branches {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+            
+            .branch {
+                min-width: 280px;
+            }
+
+            .task {
+                width: 280px;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="header-logo">
+<img alt="Logo Unimed Goiânia" class="unimed-logo" src="https://unimedgoiania.coop.br/wps/wcm/connect/43fc9234-6d8c-4494-adc2-df20f36065cd/logo-unimed-2022-portal.png?MOD=AJPERES&amp;CACHEID=ROOTWORKSPACE-43fc9234-6d8c-4494-adc2-df20f36065cd-oMsH6pa"/>
+</div>
+<div class="header-content">
+<h1>FLUXOGRAMA - Medicação Externa CEU</h1>
+<p>Esse processo envolve a central de atendimento e recepção</p>
+</div>
+</div>
+<!-- FASE 1: AGENDAMENTO -->
+<div class="process-section">
+<div class="section-title">
+                FASE 1: PROCESSO DE AGENDAMENTO
+            </div>
+<div class="flowchart">
+<!-- Início -->
+<div class="step-row" style="justify-content: center;">
+<div class="start-event">
+                        INÍCIO
+                    </div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task phone">
+<div class="task-header">
+<span>PRIMEIRO CONTATO</span>
+</div>
+<div class="task-content">
+                            Central 3216-8600 ou Jane<br/>
+                            Solicitação de agendamento: Antibiótico, Noripurum, Ferinject, etc.
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task system">
+<div class="task-header">
+<span>VERIFICAR SISTEMA AUDITORIA</span>
+</div>
+<div class="task-content">
+                            • Guia aprovada?<br/>
+                            • Validade da senha
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task medical">
+<div class="task-header">
+<span>IDENTIFICAR TIPO DE MEDICAÇÃO</span>
+</div>
+<div class="task-content">
+                            • Antibiótico ou Noripurum/Ferinject?<br/>
+                            • Verificar prescrição médica
+                        </div>
+</div>
+</div>
+<!-- Decisão: Guia Aprovada? -->
+<div class="step-row">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row">
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Guia Aprovada?</div>
+</div>
+<!-- FLUXO GUIA NÃO APROVADA -->
+<div class="decision-branches">
+<div class="branch">
+<div class="branch-label no-branch">
+<span>Guia NÃO Aprovada</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task critical">
+<div class="task-header">
+<span>ORIENTAR PACIENTE</span>
+</div>
+<div class="task-content">
+                                • O beneficiário <strong>poderá trazer o medicamento</strong> para aplicação.<br/>
+                                • Deverá <strong>comparecer ao CEU</strong> para que seja <strong>gerada a taxa de aplicação (código 60033746)</strong>.<br/>
+                                • <strong>Beneficiários intercâmbio</strong>: o processo pode <strong>levar mais tempo</strong>, pois é necessário <strong>aguardar a autorização da Unimed de origem</strong>.
+                            </div>
+</div>
+</div>
+<!-- FLUXO GUIA APROVADA -->
+<div class="branch">
+<div class="branch-label yes-branch">
+<span>Guia Aprovada</span>
+</div>
+<div class="arrow">↓</div>
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Tipo de Medicação?</div>
+<!-- ANTIBIÓTICOS -->
+<div class="decision-branches" style="margin-top: 20px; display: flex; flex-wrap: nowrap; justify-content: center; gap: 50px; overflow-x: auto;">
+<div class="branch">
+<div class="branch-label">
+<span>Antibióticos</span>
+</div>
+<div class="arrow">↓</div>
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Fornecimento?</div>
+<div class="decision-branches" style="margin-top: 15px;">
+<div class="branch">
+<div class="branch-label yes-branch">
+<span>Unimed Fornece</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task system">
+<div class="task-header">
+<span>SOLICITAÇÃO DE COMPRA</span>
+</div>
+<div class="task-content">
+                                                • <strong>Central de Atendimento</strong> encaminha e-mail à Enfermagem com a solicitação de compra da medicação.<br/>
+                                                • <strong>Enfermagem</strong> verifica as informações recebidas e repassa a demanda à Farmácia.<br/>
+                                                • <strong>Farmácia</strong> avalia a disponibilidade do item solicitado e retorna à Enfermagem com a confirmação.
+                                            </div>
+</div>
+<div class="arrow">↓</div>
+<div class="task phone">
+<div class="task-header">
+<span>CONTATO COM PACIENTE</span>
+</div>
+<div class="task-content">
+                                                A enfermagem confirma a disponibilidade da agenda, realiza o agendamento e orienta o paciente sobre o atendimento.
+                                            </div>
+</div>
+</div>
+<div class="branch">
+<div class="branch-label no-branch">
+<span>Apenas Taxa</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task critical">
+<div class="task-header">
+<span>ORIENTAÇÃO ESPECÍFICA</span>
+</div>
+<div class="task-content">
+                                                • Atendimento por ordem de chegada<br/>
+                                                • SEM agendamento necessário<br/>
+                                                • Seg-Sex: 8h-18h | Sáb: 8h-11h<br/>
+                                                • Paciente deve trazer medicação
+                                            </div>
+</div>
+</div>
+</div>
+</div>
+<!-- NORIPURUM/FERINJECT -->
+<div class="branch">
+<div class="branch-label">
+<span>Noripurum/Ferinject</span>
+</div>
+<div class="arrow">↓</div>
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Fornecimento?</div>
+<div class="decision-branches" style="margin-top: 15px;">
+<div class="branch">
+<div class="branch-label yes-branch">
+<span>Unimed Fornece</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task decision">
+<div class="task-header">
+<span>AGENDAMENTO DIRETO</span>
+</div>
+<div class="task-content">
+                                                • Agendar conforme disponibilidade<br/>
+                                                • Não precisa consultar farmácia
+                                            </div>
+</div>
+</div>
+<div class="branch">
+<div class="branch-label no-branch">
+<span>Apenas Taxa</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task critical">
+<div class="task-header">
+<span>ORIENTAÇÃO ESPECÍFICA</span>
+</div>
+<div class="task-content">
+                                                • Paciente deve trazer medicação<br/>
+                                                • Receita original obrigatória<br/>
+                                                • Agendamento necessário
+                                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Convergência para Agendamento TASY -->
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task system">
+<div class="task-header">
+<span>AGENDAMENTO TASY</span>
+</div>
+<div class="task-content">
+                            Configuração &gt; Agenda Serviços &gt; "Medicação Externa"
+                        </div>
+</div>
+</div>
+<!-- Orientações Finais -->
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task decision">
+<div class="task-header">
+<span>ORIENTAÇÕES FINAIS</span>
+</div>
+<div class="task-content">
+                            • <strong>15min de antecedência</strong><br/>
+                            • <strong>Receituário original</strong> (validade 6 meses)<br/>
+                            • <strong>Documento com foto</strong> + cartão Unimed<br/>
+                            • Próximo agendamento no dia da aplicação
+                        </div>
+</div>
+</div>
+</div>
+</div>
+<!-- FASE 2: ATENDIMENTO PRESENCIAL -->
+<div class="process-section">
+<div class="section-title">
+                FASE 2: ATENDIMENTO PRESENCIAL NO CEU
+            </div>
+<div class="flowchart">
+<!-- Chegada -->
+<div class="step-row" style="justify-content: center;">
+<div class="start-event">
+                        PACIENTE
+                    </div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task medical">
+<div class="task-header">
+<span>PACIENTE CHEGA À RECEPÇÃO</span>
+</div>
+<div class="task-content">
+                            • Documento com foto<br/>
+                            • Prescrição médica (física ou digital enviada por e-mail)
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task medical">
+<div class="task-header">
+<span>VERIFICAÇÃO DA PRESCRIÇÃO</span>
+</div>
+<div class="task-content">
+                            • Nome do paciente, medicação e dose<br/>
+                            • Quantidade e diluente (soro)<br/>
+                            • Forma e via de aplicação<br/>
+                            • Assinatura + carimbo do médico
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Está completa?</div>
+</div>
+<div class="decision-branches">
+<div class="branch">
+<div class="branch-label no-branch">
+<span>Não</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task critical">
+<div class="task-header">
+<span>CORRIGIR DADOS FALTANTES</span>
+</div>
+<div class="task-content">
+                                A recepção deve informar o paciente ou o médico sobre a ausência de informações na prescrição. A complementação pode ser feita presencialmente ou enviada por e-mail.
+                            </div>
+</div>
+</div>
+<div class="branch">
+<div class="branch-label yes-branch">
+<span>Sim</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task system">
+<div class="task-header">
+<span>CONSULTA AUTORIZAÇÃO SGU</span>
+</div>
+<div class="task-content">
+                                • Verificar guia e situação do plano<br/>
+                                • Confirmar medicações com a farmácia (ramais 8672/8647)
+                            </div>
+</div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="gateway">
+<div class="gateway-text">?</div>
+</div>
+<div class="condition">Autorizado + estoque?</div>
+</div>
+<div class="decision-branches">
+<div class="branch">
+<div class="branch-label yes-branch">
+<span>Sim</span>
+</div>
+<div class="arrow">↓</div>
+<div class="task system">
+<div class="task-header">
+<span>EXECUTAR GUIA NO SGU</span>
+</div>
+<div class="task-content">
+                                • Selecionar 'Novo exame'<br/>
+                                • Código do procedimento: 60033746<br/>
+                                • Imprimir guia SADT
+                            </div>
+</div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task system">
+<div class="task-header">
+<span>CRIAR ATENDIMENTO NO TASY</span>
+</div>
+<div class="task-content">
+                            • Recepção → Agenda Medicação Externa<br/>
+                            • Tipo: Medicação externa / Pequeno atendimento<br/>
+                            • Inserir guia SADT + senha SGU<br/>
+                            • Código procedimento: 60033746<br/>
+                            • Liberar prescrição
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task system">
+<div class="task-header">
+<span>ESCANEAMENTO E ETIQUETAÇÃO</span>
+</div>
+<div class="task-content">
+                            • Digitalizar receita + guia + documentos<br/>
+                            • Arquivar no sistema conforme protocolo
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task medical">
+<div class="task-header">
+<span>ENCAMINHAR AO SETOR DE ENFERMAGEM</span>
+</div>
+<div class="task-content">
+                            • Entregar guia SADT física<br/>
+                            • Comunicar o horário de aplicação
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task final">
+<div class="task-header">
+<span>ASSINATURA PELO PACIENTE</span>
+</div>
+<div class="task-content">
+                            Campo 67 da guia SADT
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="task final">
+<div class="task-header">
+<span>APLICAÇÃO DA MEDICAÇÃO</span>
+</div>
+<div class="task-content">
+                            Realizada conforme agendamento e prescrição
+                        </div>
+</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="arrow">↓</div>
+</div>
+<div class="step-row" style="justify-content: center;">
+<div class="end-event">
+                        FIM
+                    </div>
+</div>
+</div>
+</div>
+<!-- SEÇÃO DE ASSINATURAS -->
+<div class="signatures-section">
+<div class="signature-box">
+<h3>Controle de Documento</h3>
+<div class="signature-grid">
+<div class="signature-item">
+<div class="signature-label">
+<strong>Elaborado por:</strong>
+</div>
+<div class="signature-content">
+<div class="signature-name">Marcus Alexandre Gonçalves Santos</div>
+<div class="signature-role">Supervisor Teleatendimento CEU</div>
+<div class="signature-date">13/06/2024</div>
+<div class="signature-line"></div>
+<div class="signature-text">Assinatura</div>
+</div>
+</div>
+<div class="signature-item">
+<div class="signature-label">
+<strong>Revisado por:</strong>
+</div>
+<div class="signature-content">
+<div class="signature-name">Paula Rodovalho Nunes</div>
+<div class="signature-role">Supervisora Atendimento CEU</div>
+<div class="signature-date">16/06/2024</div>
+<div class="signature-line"></div>
+<div class="signature-text">Assinatura</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script><script>lucide.createIcons();</script></body>
+</html>
